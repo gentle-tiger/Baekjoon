@@ -9,19 +9,16 @@ public class Main {
 
     BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
-
-//        for (int i = 0; i < 10; i++){
-            while (true) {
-                StringTokenizer st = new StringTokenizer(br.readLine());
-            int A = Integer.parseInt(st.nextToken());
-            int B = Integer.parseInt(st.nextToken());
-            if(A != 0 && B != 0) {
-                System.out.println(A+B);
-            }else{
-                break;
-            }
-            }
-//    }
+        for (int i = 0; i < 1000; i++){
+            StringTokenizer st = new StringTokenizer(br.readLine());
+                int A = Integer.parseInt(st.nextToken());
+                int B = Integer.parseInt(st.nextToken());
+                if(A != 0 && B != 0) {
+                    System.out.println(A+B);
+                }else{
+                    return;
+                }
+    }
 
     }
 }
