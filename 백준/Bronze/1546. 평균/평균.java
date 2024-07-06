@@ -16,14 +16,13 @@ public class Main {
             tokens[i] = Float.parseFloat(st.nextToken());
         }
 
-
-        Arrays.sort(tokens);
-
-        float max = tokens[tokens.length-1];
         float sum = 0;
-
+        float max = 0;
         for (float  token : tokens) {
             sum += token;
+            if(max < token){
+                max = token;
+            }
         }
         float result = (sum / max * 100) / N;
 
