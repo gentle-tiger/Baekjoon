@@ -53,6 +53,7 @@ class Solution {
     }
     
     boolean isRange(int row, int col){
-        return (row >= 0) && (row < 5) && ( col >= 0) && (col < 5);
+        return (0 <= row) && (row < 5) && 
+               (0 <= col) && (col < 5);
     }
 }
