@@ -6,9 +6,9 @@ import java.util.StringTokenizer;
 /*
  * ** 문제 파악
  * 1. 정답과 힌트의 숫자는 서로 다른 숫자 세 개로 구성되어 있다.
- * 2. 정답과 힌트의 숫자를 비교했을 때, 서로 동일한 자리에 위치하면 스트라이크 1번으로 센다.
- * 3. 정답과 힌트의 숫자를 비교했을 때, 세 자리 중에 있기는 하지만 다른 자리에 위치해 있지만 볼 1번으로 센다.
- * 4. 이때, 힌트를 통해 정답을 맞출 가능성이 있는 수가 몇 개인지 파악하는 문제.
+ * 2. 정답과 힌트의 숫자가 같은 자리에 있을 때, 스트라이크
+ * 3. 정답과 힌트의 숫자가 존재하지만 자리가 다를 때, 볼
+ * 4. 이때, 힌트를 통해 정답을 맞출 가능성이 있는 숫자의 개수를 파악하는 것이 목표.
  * ** 유의할 점
  * 1. 정답을 맞추는 게 아닌 가능성이 있는 수가 몇 개인지 반환해야 함.
  *
@@ -16,9 +16,8 @@ import java.util.StringTokenizer;
  * 1. 힌트를 통해 스트라이크와 볼을 분리한다.
  * 2.
  * ** 어려웠던 점
- * 1.
- * 2.
- *
+ * 1. 모든 경우의 수를 확인하는 문제인지 몰랐음.
+ * 2. 유효성 검증하는 로직을 아직 이해하지 못함...
  *
  * ** 개선할 점
  * 1.
@@ -35,14 +34,14 @@ public class Main {
     // 결과 예상 개수
     int count = 0;
     // [질문 개수, 스트라이크 수, 볼 수]
-    int[][] quest = new int[N][3]; 
-    
-    // 힌트 받아오기
+    int[][] quest = new int[N][3];
+
+    // 힌트 저징
     for (int i = 0; i < N; i++) {
       StringTokenizer st = new StringTokenizer(br.readLine());
-      int guess = Integer.parseInt(st.nextToken());    // 추측 숫자
-      int strike = Integer.parseInt(st.nextToken());  // 스트라이크 수
-      int ball = Integer.parseInt(st.nextToken());    // 볼 수
+      int guess = Integer.parseInt(st.nextToken());
+      int strike = Integer.parseInt(st.nextToken());
+      int ball = Integer.parseInt(st.nextToken());
       quest[i][0] = guess;
       quest[i][1] = strike;
       quest[i][2] = ball;
@@ -70,13 +69,14 @@ public class Main {
         int questStrike = quest[i][1];   // 현재 질문의 스트라이크 수
         int questBall = quest[i][2];     // 현재 질문의 볼 수
 
-        // 질문 숫자의 각 자릿수 분리
+        // 자릿수 분리 (정수만 반환)
         int qFirst = questNum / 100;
         int qSecond = (questNum / 10) % 10;
         int qThird = questNum % 10;
 
         int strike = 0; // 현재 숫자에 대한 스트라이크 수
         int ball = 0;   // 현재 숫자에 대한 볼 수
+
 
         // 스트라이크 계산: 같은 자리의 숫자가 일치할 경우
         if (first == qFirst) {
