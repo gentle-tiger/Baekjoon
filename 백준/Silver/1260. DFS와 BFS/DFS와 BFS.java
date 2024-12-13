@@ -6,13 +6,12 @@ import java.io.*;
 class Main {
         static Map<Integer, List<Integer>> graph;
         static boolean[] visited;
-        static int N;
-        static int M;
-        static int V;
+        static int N, M, V;
+        static BufferedReader br;
+        static BufferedWriter bw;
     public static void main(String[] args) throws IOException {
-     
-        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
+        br = new BufferedReader(new InputStreamReader(System.in));
+        bw = new BufferedWriter(new OutputStreamWriter(System.out));
 
         String[] node = br.readLine().split(" ");
         N = Integer.parseInt(node[0]);
@@ -33,45 +32,42 @@ class Main {
             graph.get(edge2).add(edge1);
         }
         
-        // 정렬
         for (int i = 1; i <= N; i++) {
             Collections.sort(graph.get(i));
         }
         
-        visited = new boolean[N+1];
-        dfs(V, bw);
+        visited = new boolean[N + 1];
+        dfs(V);
 
-        bw.write("\n"); // 줄바꿈
+        bw.write("\n");
         
-        visited = new boolean[N+1];
-        bfs(V, bw);
+        Arrays.fill(visited, false);
+        bfs(V);
         
         bw.flush();
         bw.close();
         br.close();
     }
 
-
-    public static void dfs(int start, BufferedWriter bw) throws IOException {
+    public static void dfs(int start) throws IOException {
         visited[start] = true;
-        bw.write(String.valueOf(start)+ " ");
+        bw.write(start+ " ");
 
         for(int neighbor : graph.get(start)){
             if(!visited[neighbor]){
-                dfs(neighbor, bw);
+                dfs(neighbor);
             }
         }
     }
 
-    public static void bfs(int start, BufferedWriter bw) throws IOException {
-
+    public static void bfs(int start) throws IOException {
         Queue<Integer> q = new LinkedList<>();
         visited[start] = true;
         q.add(start);
         
         while(!q.isEmpty()){
             int cur = q.poll();
-            bw.write(String.valueOf(cur) + " ");
+            bw.write(cur + " ");
             
             for(int neighbor : graph.get(cur)){
                 if(!visited[neighbor]){
@@ -80,7 +76,5 @@ class Main {
                 }
             }
         }
-
     }
-    
 }
