@@ -16,32 +16,12 @@ class Edge implements Comparable<Edge> {
         return Integer.compare(this.weight, other.weight);
     }
 }
-class Pair {
-    int u, v; 
 
-    Pair(int u, int v){
-        this.u = u; 
-        this.v = v; 
-    }
-    // 이거 꼭 있어야 하는지 의문... 코드가 너무 어려워서
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj) return true;
-        if (!(obj instanceof Pair)) return false;
-        Pair p = (Pair) obj;
-        return this.u == p.u && this.v == p.v;
-    }
-    // 이거 꼭 있어야 하는지 의문... 코드가 너무 어려워서
-    @Override
-    public int hashCode() {
-        return Objects.hash(u, v);
-    }
-}
 class Main {
     static int N, M, S, D;
     static List<List<Edge>> graph, reverseGraph; // List<Edge> 까지는 알겠는데 [] 뭐지??
     static final int INF = Integer.MAX_VALUE;
-    static Set<Pair> isShortestPath;
+    static boolean[][] isShortestPath;
     public static void main(String[] args) throws IOException {
 
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -59,8 +39,7 @@ class Main {
     
             graph = new ArrayList<>();
             reverseGraph = new ArrayList<>();
-            isShortestPath = new HashSet<>();
-            
+            isShortestPath = new boolean[N][N];
             for(int i = 0; i< N; i++){
                 graph.add(new ArrayList<>());
                 reverseGraph.add(new ArrayList<>());
@@ -108,7 +87,7 @@ class Main {
 
             for(Edge edge : graph.get(curVertex)){ // getOrDefault 사용하지 않는 이유는?
                 // 이게 어떤 코드지? 
-                if(isShortestPath.contains(new Pair(curVertex, edge.vertex))) continue;
+                if(isShortestPath[curVertex][edge.vertex]) continue;
                 
                 int nextVertex = edge.vertex;
                 int nextWeight = curWeight + edge.weight;
@@ -126,7 +105,7 @@ class Main {
     
     private static void removeShortestPaths(int[] dist){
         Queue<Integer> q = new LinkedList<>(); // ArrayDeque 가 더 성능지 좋지 않나?
-        boolean[] visited = new boolean[N];  // 방문 체크 배열
+        boolean[] visited = new boolean[N];
         q.add(D);
         visited[D] = true;
 
@@ -137,8 +116,7 @@ class Main {
                 int prev = edge.vertex;
 
                 if(dist[prev] + edge.weight == dist[cur]){
-                    isShortestPath.add(new Pair(prev, cur));
-
+                    isShortestPath[prev][cur] = true;
                     if(!visited[prev]){
                         visited[prev] = true;
                         q.add(prev);
@@ -147,11 +125,6 @@ class Main {
             }
         }
     }
-
-
-
-
-
 
     
 }
