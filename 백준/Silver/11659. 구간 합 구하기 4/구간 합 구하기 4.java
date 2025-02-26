@@ -1,39 +1,51 @@
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.util.Arrays;
-import java.util.StringTokenizer;
+import java.util.*;
+import java.lang.*;
+import java.io.*;
 
-public class Main {
+// The main method must be in a class named "Main".
+class Main {
     public static void main(String[] args) throws IOException {
+
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
         StringTokenizer st = new StringTokenizer(br.readLine());
-
         int N = Integer.parseInt(st.nextToken());
         int M = Integer.parseInt(st.nextToken());
-        int[] A = new int[N];
-        int[] S = new int[N + 1];
-
-        StringTokenizer st1 = new StringTokenizer(br.readLine());
-        // 초기 배열
-        for (int i = 0; i < N; i++) {
-            A[i] = Integer.parseInt(st1.nextToken());
+        
+        int[] arr = new int[N + 1];
+        
+        st = new StringTokenizer(br.readLine());
+        for(int i = 1; i <= N; i++){
+            arr[i] = Integer.parseInt(st.nextToken());
         }
 
-        // 누적 합 배열  S[i] = S[i-1] + A[i-1]
-        S[0] = 0;
-        for (int i = 1; i <= N; i++) {
-            S[i] = S[i - 1] + A[i - 1];
-        }
+        int[] dp = new int[N + 1];
+        dp[0] = 0; 
 
-        // 누적 합 배열 (i,j) i부터 j까지일 때, (i,j) = S[j] S[i-1]
-        for (int i = 1; i <= M; i++) {
-            StringTokenizer st2 = new StringTokenizer(br.readLine());
-            int X = Integer.parseInt(st2.nextToken());
-            int Y = Integer.parseInt(st2.nextToken());
-
-            System.out.println(S[Y]- S[X-1]);
+        // 누적합 
+        // 5 9 12 14 15 
+        // 먄약 3~5라면 5-3 = 
+        for(int i = 1; i <= N; i++){
+            dp[i] = dp[i-1] + arr[i];
+            
         }
+        
+
+        for(int i = 1; i <= M; i++){
+            st = new StringTokenizer(br.readLine());
+
+            int a = Integer.parseInt(st.nextToken());
+            int b = Integer.parseInt(st.nextToken());
+            int result = 0; 
+            
+            if(a < b){
+                result = dp[b] - dp[a - 1];    
+            }else{
+                result = dp[a] - dp[b - 1];    
+            }
+            
+            System.out.println(result);
+        }
+        
     }
 }
