@@ -14,32 +14,30 @@ class Main {
         for(int i = 0; i < N; i++){
             arr[i] = Integer.parseInt(br.readLine());
         }
-        
-        
+
+        System.out.println(solveStackSequence(N, arr));
+    }
+
+    private static String solveStackSequence(int N, int[] arr){
         Stack<Integer> stack = new Stack<>();
-        List<String> result = new ArrayList<>();
-
-        int cur = 1; 
-        
-        for(int num : arr){
-
-            while(cur <= num){
-                stack.push(cur);
-                result.add("+");
-                cur++;
+        StringBuilder result = new StringBuilder();
+        int cur = 1; // 스택에 push할 문자
+        // N = 8;
+        // arr = [4, 3, 6, 8, 7, 5, 2, 1]
+        for(int target : arr){
+            while(cur <= target){
+                stack.push(cur++);
+                result.append("+\n");
             }
-            // stack 비어있지 않고, 맨 위의 값이 목표 숫자와 같다면 꺼낸다.
-            if(!stack.isEmpty() && stack.peek() == num){
-                stack.pop();
-                result.add("-");
+
+            if(stack.peek() == target){
+               stack.pop();
+                result.append("-\n");
             }else{
-                System.out.println("NO");
-                return;
+                return "NO";
             }
         }
-
-        for(String op : result){
-            System.out.println(op);
-        }
+        
+        return result.toString();
     }
 }
