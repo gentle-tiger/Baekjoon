@@ -4,35 +4,29 @@ import java.io.*;
 
 // The main method must be in a class named "Main".
 class Main {
+
     public static void main(String[] args) throws IOException {
-
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-
         int N = Integer.parseInt(br.readLine());
 
-        Map<String, String> employee = new HashMap<>();
-        for(int i = 0; i < N; i++){
+        NavigableSet<String> inOffice = new TreeSet<>(Comparator.reverseOrder());
+        
+        while(N-- > 0){
             StringTokenizer st = new StringTokenizer(br.readLine());
             String name = st.nextToken();
-            String log = st.nextToken();
-            employee.put(name, log);
-        }
 
-
-        Iterator<Map.Entry<String, String>> iter = employee.entrySet().iterator();
-        while(iter.hasNext()){
-            if(iter.next().getValue().equals("leave")){
-                iter.remove();
+            if(st.nextToken().equals("enter")){
+                inOffice.add(name);
+            }else{
+                inOffice.remove(name);
             }
         }
 
-        Map<String, String> decending = new TreeMap<>(employee).descendingMap();
-        
-        // 조회해보기
-        for(Map.Entry<String, String> e : decending.entrySet()){
-            System.out.println(e.getKey());
+        StringBuilder sb = new StringBuilder();
+        for(String name : inOffice){
+            sb.append(name).append('\n');
         }
-
         
+        System.out.println(sb);
     }
 }
