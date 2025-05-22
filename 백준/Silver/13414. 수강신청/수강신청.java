@@ -6,39 +6,31 @@ import java.io.*;
 class Main {
     public static void main(String[] args) throws IOException {
 
-
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        StringTokenizer st = new StringTokenizer(br.readLine());
 
-        String[] input = br.readLine().split(" ");
+        int n = Integer.parseInt(st.nextToken());
+        int l = Integer.parseInt(st.nextToken());
 
-        int n = Integer.parseInt(input[0]);
-        int l = Integer.parseInt(input[1]);
+        LinkedHashSet<String> attendees = new LinkedHashSet<>();
 
-        Set<String> list = new LinkedHashSet<>();
-        
-        // System.out.println(n +" " + l);
-        
         for(int i = 0; i < l; i++){
-            String person = br.readLine();
+            String id = br.readLine();
 
-            if(!list.contains(person)){
-              list.add(person);   
-            }else{
-              list.remove(person); // 삭제하고
-              list.add(person); // 맨 뒤
-            }
-        }
-        int i = 0;
-        for(String s : list){
-            if(i < n){
-                System.out.println(s);
-                i++;
-            }else{
-                return;
-            }
+            attendees.remove(id);
+            attendees.add(id);
         }
 
+        StringBuilder sb = new StringBuilder();
+        int printed = 0; 
+        for(String id : attendees){
+            if(printed == n) break;
+            sb.append(id).append("\n");
+            printed++;
+        }
+
+
+        System.out.println(sb.toString());
         
-        // System.out.println("Hello world!");
     }
 }
