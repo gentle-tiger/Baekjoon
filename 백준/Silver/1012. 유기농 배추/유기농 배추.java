@@ -1,106 +1,68 @@
 import java.util.*;
-import java.lang.*;
 import java.io.*;
 
-// The main method must be in a class named "Main".
 class Main {
-        private static int M;
-        private static int N;
-        private static int K;
-        private static int[][] grid;
-        private static int[][] dist = {{1, 0},{-1, 0},{0, 1},{0, -1}};
+    static int M, N, K; // 배추밭의 가로, 세로, 배추의 개수
+    static int[][] arr; // 배추밭 배열
+    static boolean[][] visited; // 방문 체크 배열
+
+    // 방향 배열 (상, 하, 좌, 우)
+    static int[] dx = {-1, 1, 0, 0};
+    static int[] dy = {0, 0, -1, 1};
+
     public static void main(String[] args) throws IOException {
-
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        int T = Integer.parseInt(br.readLine());  // 테스트 케이스 수
 
-        int T = Integer.parseInt(br.readLine());
-        // System.out.println(T);
+        for (int t = 0; t < T; t++) {
+            // 가로 M, 세로 N, 배추의 개수 K
+            StringTokenizer st = new StringTokenizer(br.readLine());
+            M = Integer.parseInt(st.nextToken());
+            N = Integer.parseInt(st.nextToken());
+            K = Integer.parseInt(st.nextToken());
 
-        for(int t = 0; t < T; t++){
+            arr = new int[N][M];
+            visited = new boolean[N][M];
 
-            String[] input_1 = br.readLine().split(" ");
-            M = Integer.parseInt(input_1[0]); // 가로
-            N = Integer.parseInt(input_1[1]); // 세로
-            K = Integer.parseInt(input_1[2]); // 개수
-
-            grid = new int[N][M];
-            // Arrays.fill(grid, 0);
-
-            for(int k = 0; k < K; k++){
-                String[] input_2 = br.readLine().split(" ");
-                int edge1 = Integer.parseInt(input_2[0]);
-                int edge2 = Integer.parseInt(input_2[1]);
-
-                grid[edge2][edge1] = 1; // 순서 변경해줘야 함
-            }
-            
-            for(int i = 0; i < N; i++){
-                for(int j = 0; j < M; j++){
-                    // System.out.print(grid[i][j] + " ");
-                }
-                // System.out.println();
+            // 배추 위치 입력
+            for (int i = 0; i < K; i++) {
+                st = new StringTokenizer(br.readLine());
+                int x = Integer.parseInt(st.nextToken()); // x좌표
+                int y = Integer.parseInt(st.nextToken()); // y좌표
+                arr[y][x] = 1;  // 배추가 심어진 곳
             }
 
-        boolean[][] visited = new boolean[N][M];
+            int count = 0;  // 연결된 배추 구역의 개수
 
-        int count = 0;  // 필요한 지렁이 개수
-            
-        for(int n = 0; n < N; n++){
-            for(int m = 0; m < M; m++){
-                if(grid[n][m] == 1 && !visited[n][m]){
-                    bfs(n, m, visited);
-                    count++;
+            // 모든 칸을 돌면서 아직 방문하지 않은 배추를 찾으면 DFS 시작
+            for (int i = 0; i < N; i++) {
+                for (int j = 0; j < M; j++) {
+                    if (arr[i][j] == 1 && !visited[i][j]) {
+                        // 새로운 구역을 찾았을 때 DFS 실행
+                        dfs(i, j);
+                        count++; // 구역 개수 증가
+                    }
                 }
             }
-        }
-        System.out.println(count);
+
+            // 결과 출력
+            System.out.println(count);
         }
     }
-        
-    public static void bfs(int n, int m, boolean[][] visited){
-        Queue<int[]> q = new ArrayDeque<>();
-        q.add(new int[]{n,m}); // 8 4 
 
-        visited[n][m] = true;
-        
-        while(!q.isEmpty()){
-            int[] cur = q.poll();
-            int curRow = cur[0];
-            int curCol = cur[1];
+    // DFS 함수 (배추가 연결된 구역을 탐색)
+    public static void dfs(int x, int y) {
+        visited[x][y] = true;  // 방문 표시
 
-            for(int i = 0; i < 4; i++){
-                int nextRow = curRow + dist[i][0];
-                int nextCol = curCol + dist[i][1];
+        // 4방향 탐색
+        for (int i = 0; i < 4; i++) {
+            int nx = x + dx[i];
+            int ny = y + dy[i];
 
-                if(0 <= nextRow && nextRow < N &&
-                   0 <= nextCol && nextCol < M && 
-                   !visited[nextRow][nextCol] && grid[nextRow][nextCol] == 1)
-                {
-                    q.add(new int[]{nextRow,nextCol});
-                    visited[nextRow][nextCol] = true;
-                }
+            // 배열 범위 내에 있고, 배추가 심어져 있으며, 방문하지 않았다면
+            if (nx >= 0 && nx < N && ny >= 0 && ny < M && arr[nx][ny] == 1 && !visited[nx][ny]) {
+                dfs(nx, ny);  // 재귀적으로 DFS 호출
             }
-            
         }
-        
     }
-
-        
 }
-
-
-
-        // Map<Integer,List<Integer>> graph = new HashMap<>();
-        
-        // for(int i = 0; i < M; i++){
-        //     graph.put(i, new ArrayList<>());
-        // }
- 
-        // for(int i = 0; i < K; i++){
-        //     String[] edge = br.readLine().split(" ");
-        //         int edge1 = Integer.parseInt(edge[0]);
-        //         int edge2 = Integer.parseInt(edge[1]);
-        //         graph.get(edge1).add(edge2);
-        //         graph.get(edge2).add(edge1);
-        //         System.out.println("[" + edge1 + "," + edge2 + "]");
-        //     }
