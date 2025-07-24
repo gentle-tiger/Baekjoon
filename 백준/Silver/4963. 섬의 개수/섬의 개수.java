@@ -1,65 +1,73 @@
 import java.util.*;
+import java.lang.*;
 import java.io.*;
 
+// The main method must be in a class named "Main".
 class Main {
+    public static int W,H;
+    public static final int[] dx = {-1,  1,  0,  0, -1, -1,  1,  1};
+    public static final int[] dy = { 0,  0, -1,  1, -1,  1, -1,  1};
+    
     public static void main(String[] args) throws IOException {
+
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        StringBuilder sb = new StringBuilder();
 
-        while (true) {
+        while(true){
+            
             String[] input = br.readLine().split(" ");
-            int W = Integer.parseInt(input[0]); // 너비
-            int H = Integer.parseInt(input[1]); // 높이
+            W = Integer.parseInt(input[0]); 
+            H = Integer.parseInt(input[1]); 
+            
+            if (W == 0 && H == 0) break;
 
-            if (W == 0 && H == 0) break; // 종료 조건
-
-            int[][] grid = new int[H][W];
+            int[][] isLand = new int[H][W];
             boolean[][] visited = new boolean[H][W];
-            for (int h = 0; h < H; h++) {
-                String[] row = br.readLine().split(" ");
-                for (int w = 0; w < W; w++) {
-                    grid[h][w] = Integer.parseInt(row[w]);
+            for(int h = 0; h < H; h++){
+                StringTokenizer st = new StringTokenizer(br.readLine());
+                for(int w = 0; w < W; w++){
+                    isLand[h][w] = Integer.parseInt(st.nextToken());
                 }
             }
 
-            // 8방향 이동
-            int[][] directions = {
-                {-1, 0}, {1, 0}, {0, -1}, {0, 1},
-                {-1, -1}, {-1, 1}, {1, -1}, {1, 1}
-            };
+            
 
-            int chicken = 0;
-
-            for (int i = 0; i < H; i++) {
-                for (int j = 0; j < W; j++) {
-                    if (grid[i][j] == 1 && !visited[i][j]) {
-                        chicken++;
-                        Queue<int[]> q = new ArrayDeque<>();
-                        q.add(new int[]{i, j});
-                        visited[i][j] = true;
-
-                        while (!q.isEmpty()) {
-                            int[] cur = q.poll();
-                            int x = cur[0];
-                            int y = cur[1];
-
-                            for (int[] dir : directions) {
-                                int nx = x + dir[0];
-                                int ny = y + dir[1];
-
-                                if (nx >= 0 && nx < H && ny >= 0 && ny < W &&
-                                    grid[nx][ny] == 1 && !visited[nx][ny]) {
-                                    q.add(new int[]{nx, ny});
-                                    visited[nx][ny] = true;
-                                }
-                            }
-                        }
+            int count = 0; 
+            for(int h = 0; h < H; h++){
+                for(int w = 0; w < W; w++){
+                    if(!visited[h][w] && isLand[h][w] == 1){
+                        dfs(w,h, isLand, visited);
+                        ++count;
                     }
                 }
             }
-            sb.append(chicken).append("\n");
-        }
 
-        System.out.print(sb);
+            System.out.println(count);
+        }
+        
+        // System.out.println("Hello world!");
+        
     }
+    
+    private static void dfs(int w, int h, int[][] isLand, boolean[][] visited){
+
+        visited[h][w] = true;
+
+        for(int i = 0; i < 8; i++){
+            int nx = w + dx[i];
+            int ny = h + dy[i];
+
+            if(0 <= nx && nx < W && 
+               0 <= ny && ny < H && !visited[ny][nx] && isLand[ny][nx] == 1){
+                dfs(nx,ny,isLand,visited);
+            }
+        }
+        
+        
+    }
+
+        
+
 }
+
+
+
